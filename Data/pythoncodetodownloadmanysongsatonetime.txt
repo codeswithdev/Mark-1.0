@@ -1,0 +1,91 @@
+Here's a Python script that uses the `youtube-dl` library to download multiple songs from YouTube at once:
+
+```python
+import os
+from pytube import YouTube
+
+def download_songs(song_urls, download_dir):
+    for url in song_urls:
+        try:
+            yt = YouTube(url)
+            print(f"Downloading {yt.title}...")
+            yt.streams.filter(only_audio=True).first().download(download_dir)
+            print(f"{yt.title} downloaded successfully!")
+        except Exception as e:
+            print(f"Failed to download {url}: {e}")
+
+def main():
+    song_urls = input("Enter the URLs of the songs you want to download, separated by commas: ").split(',')
+    song_urls = [url.strip() for url in song_urls]
+    download_dir = input("Enter the directory where you want to save the songs: ")
+
+    if not os.path.exists(download_dir):
+        os.makedirs(download_dir)
+
+    download_songs(song_urls, download_dir)
+
+if __name__ == "__main__":
+    main()
+```
+
+However, please note that this script requires the `pytube` library, which you can install using pip:
+
+```bash
+pip install pytube
+```
+
+Also, this script only downloads the audio of the YouTube videos. If you want to download the video as well, you can modify the `download_songs` function to use `yt.streams.filter(progressive=True).first().download(download_dir)` instead.
+
+Alternatively, you can use the `youtube-dl` command-line tool to download multiple songs at once. Here's an example of how you can use it:
+
+```bash
+youtube-dl -x --audio-format mp3 -o "%(title)s.%(ext)s" <url1> <url2> <url3>
+```
+
+Replace `<url1>`, `<url2>`, and `<url3>` with the URLs of the songs you want to download.
+
+If you want to download the songs from a text file, you can use the following command:
+
+```bash
+youtube-dl -x --audio-format mp3 -o "%(title)s.%(ext)s" -a song_urls.txt
+```
+
+Replace `song_urls.txt` with the name of the text file that contains the URLs of the songs you want to download.
+
+Here's a Python script that uses the `youtube-dl` command-line tool to download multiple songs from a text file:
+
+```python
+import subprocess
+import os
+
+def download_songs(song_urls_file, download_dir):
+    if not os.path.exists(download_dir):
+        os.makedirs(download_dir)
+
+    with open(song_urls_file, 'r') as f:
+        song_urls = [line.strip() for line in f.readlines()]
+
+    for url in song_urls:
+        try:
+            subprocess.run(f"youtube-dl -x --audio-format mp3 -o \"{download_dir}/%(title)s.%(ext)s\" {url}", shell=True, check=True)
+            print(f"{url} downloaded successfully!")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to download {url}: {e}")
+
+def main():
+    song_urls_file = input("Enter the path to the text file that contains the URLs of the songs you want to download: ")
+    download_dir = input("Enter the directory where you want to save the songs: ")
+
+    download_songs(song_urls_file, download_dir)
+
+if __name__ == "__main__":
+    main()
+```
+
+Please note that this script requires the `youtube-dl` command-line tool to be installed on your system. You can install it using pip:
+
+```bash
+pip install youtube-dl
+```
+
+Or you can download the binary from the official GitHub repository: <https://github.com/rg3/youtube-dl/releases>

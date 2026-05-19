@@ -1,0 +1,26 @@
+Here is a simple C language code to print "Hello World":
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Hello World\n");
+    return 0;
+}
+```
+
+Let me explain what this code does:
+
+- `#include <stdio.h>`: This line includes the standard input/output library, which allows us to use functions like `printf()`.
+- `int main()`: This is the main function where the program starts execution.
+- `printf("Hello World\n")`: This line prints "Hello World" followed by a newline character.
+- `return 0`: This line indicates the end of the program and returns an exit status of 0, indicating successful execution.
+
+To compile and run this code, save it in a file with a `.c` extension (e.g., `hello.c`), then use a C compiler like GCC:
+
+```bash
+gcc hello.c -o hello
+./hello
+```
+
+This will print "Hello World" to the console.

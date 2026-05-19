@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Speech AI</title>
+</head>
+<body style="background-color: black; color: white;">
+    <button id="start" onclick="startRecognition()">Start</button>
+    <button id="end" onclick="stopRecognition()">Stop</button>
+    <p id="output"></p>
+    <script>
+        const output = document.getElementById('output');
+        let recognition;
+        let isStopping = false;
+
+        function startRecognition() {
+            recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+            recognition.lang = 'hi';
+            recognition.continuous = true;
+            recognition.interimResults = true; // Fast detection
+
+            recognition.onresult = function(event) {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    }
+                }
+                if (finalTranscript) {
+                    output.textContent = finalTranscript;
+                }
+            };
+
+            recognition.onend = function() {
+                if (!isStopping) recognition.start(); // Auto-restart if it drops
+            };
+
+            recognition.start();
+        }
+
+        function stopRecognition() {
+            isStopping = true;
+            if (recognition) recognition.stop();
+            output.innerHTML = "";
+        }
+    </script>
+</body>
+</html>

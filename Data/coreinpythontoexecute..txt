@@ -1,0 +1,65 @@
+Here is a core Python script that uses the `pyaudio` library to detect claps:
+
+```python
+import pyaudio
+import numpy as np
+
+# Set up audio parameters
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+CHUNK = 1024
+
+# Set up the audio threshold for clap detection
+THRESHOLD = 2000
+
+def detect_clap(stream):
+    try:
+        while True:
+            # Read audio data from the stream
+            data = np.frombuffer(stream.read(CHUNK), dtype=np.int16)
+
+            # Calculate the average amplitude of the audio data
+            amplitude = np.average(np.abs(data))
+
+            # Check if the amplitude is above the threshold
+            if amplitude > THRESHOLD:
+                print("Clap detected!")
+
+    except KeyboardInterrupt:
+        print("Clap detection stopped.")
+
+def main():
+    # Create a PyAudio object
+    p = pyaudio.PyAudio()
+
+    # Open the audio stream
+    stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
+
+    print("Clap detection started. Press Ctrl+C to stop.")
+    detect_clap(stream)
+
+    # Close the audio stream and PyAudio object
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+if __name__ == "__main__":
+    main()
+```
+
+This script defines two functions: `detect_clap` and `main`. The `detect_clap` function continuously reads audio data from the stream and checks if the amplitude is above the threshold. If it is, it prints "Clap detected!". The `main` function creates a PyAudio object, opens the audio stream, and calls the `detect_clap` function.
+
+To execute this script, you will need to have Python and the `pyaudio` library installed on your system. You can install `pyaudio` using pip:
+
+```bash
+pip install pyaudio
+```
+
+Once you have installed `pyaudio`, you can save this script to a file (e.g., `clap_detection.py`) and execute it using Python:
+
+```bash
+python clap_detection.py
+```
+
+This will start the clap detection script, and you can press Ctrl+C to stop it.

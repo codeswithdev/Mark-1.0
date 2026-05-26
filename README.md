@@ -1,5 +1,5 @@
 
-# ⚡ Project Dora — Agentic AI Assistant
+# ⚡ Project Mark — Agentic AI Assistant
 
 > A voice-enabled, multilingual AI assistant powered by LLMs, RAG, and real-time web search.
 
